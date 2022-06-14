@@ -7,6 +7,7 @@ let engine;
 let world;
 
 var tower;
+var cannon, angle;
 var backgroundImg;
 
 function preload() {
@@ -16,16 +17,19 @@ function preload() {
 
 
 function setup() {
+  rectMode(CENTER);
+  ellipseMode(RADIUS);
+  angleMode(DEGREES);
+
   canvas = createCanvas(1200,600);
 
   engine = Engine.create();
   world = engine.world;
 
-  tower = new Tower(150,350,160,310);
+  angle = 20;
 
-  rectMode(CENTER);
-  ellipseMode(RADIUS);
-  
+  tower = new Tower(150,350,160,310);
+  cannon = new Cannon(180,130,130,100,angle);
 }
 
 function draw() 
@@ -33,6 +37,8 @@ function draw()
   image(backgroundImg, 0, 0, width, height);
   Engine.update(engine);
   
+  cannon.display();
   tower.display();
+  
 }
 
