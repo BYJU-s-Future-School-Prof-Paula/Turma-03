@@ -74,9 +74,10 @@ class CannonBall{
         this.isSink = true;
         Body.setVelocity(this.body, {x:0, y:0});
         this.r = 90;
+
         setTimeout(() => {
             World.remove(world, this.body);
-            balls.splice(i,1);
+            balls.splice(index,1);
         }, 1000);
     }
 }

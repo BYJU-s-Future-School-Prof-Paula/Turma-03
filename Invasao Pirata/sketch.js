@@ -22,6 +22,9 @@ var brokenSpritedata, brokenSpritesheet;
 var waterAnimation = [];
 var waterSpritedata, waterSpritesheet;
 
+var som_bg, som_cannon;
+var som_agua, som_hahaha;
+
 function preload() {
   backgroundImg = loadImage("./assets/background.gif");
   boatSpritedata = loadJSON("./assets/boat/boat.json");
@@ -30,6 +33,11 @@ function preload() {
   brokenSpritesheet = loadImage("./assets/boat/broken_boat.png");
   waterSpritedata = loadJSON("./assets/water_splash/water_splash.json");
   waterSpritesheet = loadImage("./assets/water_splash/water_splash.png");
+
+  som_bg = loadSound("./assets/background_music.mp3");
+  som_cannon = loadSound("./assets/cannon_explosion.mp3");
+  som_agua = loadSound("./assets/cannon_water.mp3");
+  som_hahaha = loadSound("./assets/pirate_laugh.mp3");
 }
 
 
@@ -77,11 +85,29 @@ function setup() {
 
 function draw() 
 {
+  if(!som_bg.isPlaying()){
+    som_bg.play();
+    som_bg.setVolume(0.1);
+  }
+
   image(backgroundImg, 0, 0, width, height);
   Engine.update(engine);
   
   for(var i = 0; i < balls.length; i++){
     showCannonBalls(i);
+
+    for(var j = 0; j < boats.length; j++){
+      if(balls[i] !== undefined && boats[j] !== undefined){
+        var col = Matter.SAT.collides(balls[i].body, boats[j].body);
+        if(col.collided){
+          boats[j].remove(j);
+
+          World.remove(world, balls[i].body);
+          balls.splice(i,1);
+          i--;
+        }
+      }
+    }
   }
 
   // Body.setVelocity(boat.body, {x: -0.9, y: 0});
@@ -95,6 +121,8 @@ function draw()
 function keyReleased(){
   if(keyCode === DOWN_ARROW){
     balls[balls.length-1].shoot();
+    som_cannon.play();
+    som_cannon.setVolume(0.1);
   }
 }
 
@@ -109,7 +137,10 @@ function showCannonBalls (i){
   balls[i].display();
   if(balls[i].body.position.x >= width ||
      balls[i].body.position.y >= height-60){
-  
+      if(!balls[i].isSink){
+        som_agua.play();
+        som_agua.setVolume(0.1);
+      }
       balls[i].remove(i);
   }
 }

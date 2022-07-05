@@ -8,6 +8,7 @@ class Boat{
         this.animation = boatAnimation;
         this.speed = 0.05;
         World.add(world,this.body);
+        this.isBroken = false;
     }
 
     display() {
@@ -25,5 +26,18 @@ class Boat{
 
     animate(){
         this.speed += 0.05;
+    }
+
+    remove(index){
+        this.animation = brokenAnimation;
+        this.isBroken = true;
+        this.speed = 0.05;
+        this.width = 300;
+        this.height = 300;
+
+        setTimeout(() => {
+            World.remove(world, boats[index].body);
+            boats.splice(index,1);
+        }, 2000);
     }
 }
