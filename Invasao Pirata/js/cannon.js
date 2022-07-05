@@ -12,7 +12,7 @@ class Cannon {
 
     display() {
 
-        console.log(this.angle);
+        //console.log(this.angle);
         if(keyIsDown(RIGHT_ARROW) && this.angle < 50) {
             this.angle = this.angle + 1;
         }
